@@ -23,6 +23,7 @@ body {
     float: left;
     margin: 0 10px 0 0;
     text-align: center;
+    cursor: pointer;
 }
 #content {
     overflow: auto;
