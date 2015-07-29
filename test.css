@@ -12,13 +12,16 @@ body {
 #title {
     /* border: 1px solid; */
     text-align: center;
+    margin: 0 0 0.3em 0;
 }
 #filters {
     /* border: 1px solid; */
+    display: table;
+    margin: 0 auto;
 }
 .filter {
     float: left;
-    margin: 0 15px 0 0;
+    margin: 0 10px 0 0;
     text-align: center;
 }
 #content {
