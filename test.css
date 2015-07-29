@@ -6,7 +6,8 @@ body {
 }
 #topbar {
     overflow: auto;
-    border: 1px solid;
+    /* border: 1px solid; */
+    margin: 0.5em 0 0 0;
 }
 #title {
     /* border: 1px solid; */
@@ -19,6 +20,13 @@ body {
     float: left;
     margin: 0 15px 0 0;
     text-align: center;
+}
+#content {
+    overflow: auto;
+    margin: 1em auto;
+    max-width: 600px;
+    border: 1px dotted #333;
+    padding: 20px;
 }
 #projects {
     overflow: auto;
