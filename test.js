@@ -18,13 +18,13 @@ function initFilters() {
 }
 
 function toggleFilter(filter) {
-  var index = filters.indexOf(filter.innerText);
+  var index = filters.indexOf(filter.innerHTML);
   if (index !== -1) {
     filter.style.fontWeight = "";
     filters.splice(index, 1);
   } else {
     filter.style.fontWeight = "bold";
-    filters.push(filter.innerText);
+    filters.push(filter.innerHTML);
   }
   updateFilters();
   updateProjects("date", false);
@@ -67,7 +67,7 @@ function updateFilters() {
   var visible_filters = Object.keys(visible_filters);
   for (var i = 0; i < filter_elements.length; ++i) {
     var filter = filter_elements[i];
-    if (visible_filters.indexOf(filter.innerText) == -1) {
+    if (visible_filters.indexOf(filter.innerHTML) == -1) {
       filter.style.display = "none";
     } else {
       filter.style.display = "block";
