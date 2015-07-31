@@ -1,0 +1,37 @@
+This is a sexy static site. This text should appear on the root page.
+
+My site is all about
+- kites
+- dogs
+
+* news
+This is the "news" section of my site.
+** Look, a website.
+:PROPERTIES:
+:date:      <2015-07-26 Sun>
+:dog_noise: woof
+:END:
+I don't believe in private properties.
+# CHECK IT:
+You can use markdown,
+- it
+- is
+- nice.
+* writing
+I only write about things that are important.
+** Saving the world
+TODO
+* projects
+Here are my cool projects!
+** handmade kites
+Pictures of kites! I love kites.
+
+INSERT MARKUP
+** asdf								  :completed:
+** asdf								     :boring:
+** start a new website
+this one sucks
+** my secret project						    :private:
+* pictures of dogs
+Here are pictures of dogs!
+[markup for pictures]
