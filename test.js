@@ -1,5 +1,28 @@
 /* TODO
-- use colons instead of commas to delimit tags
+- ADD SORTING STUFF THEN STOP AND WORK ON org-to-html part
+- use colons instead of spaces to delimit tags?
+- get css lookin' all nice
+- figure out what things will look like if both text and projects
+- nice if had filters in URL bar so could "deep link"?
+- expose properties / sort stuff by properties
+  use flexbox? 
+  https://news.ycombinator.com/item?id=9963714
+  https://css-tricks.com/snippets/css/a-guide-to-flexbox/
+  https://philipwalton.github.io/solved-by-flexbox/demos/grids/
+
+sorting mini-todo
+- need to grab properties from divs and reorder
+- easiest way to re-order just to use JS?
+- to grab properties - should be pretty straightforward, just iterate over
+  all projects 
+- to sort once have properties...
+  definitely just use array.sort(fnc)
+  should store an array of all the elements globally, use that for determining order
+  then just have the function check the desired value (and use some default value)
+  how to integrate global list? shouldn't need to change hiding/showing code
+  and also should be fine with adding/removing from the dom?
+  maybe there are also functions to shuffle around order...
+- how to do special case for date?
 */
 
 var filters = [];
