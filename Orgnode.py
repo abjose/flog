@@ -139,6 +139,25 @@ def makelist(filename):
                             
    return nodelist
 
+def maketree(filename):
+   """
+   Read an org-mode file and return a tree of Orgnode objects
+   created from this file.
+   """
+   try:
+      f = open(filename, 'r')
+   except IOError:
+      print "Unable to open file [%s] " % filename
+      print "Program terminating."
+      sys.exit(1)
+
+
+   # TODO:
+   # - add parent, children, children_tags, children_properties, ??? to OrgNode
+   # -- should be of immediate children only, right?
+   # - make a root node that has 'bare' text in it
+
+   
 ######################
 class Orgnode(object):
    """
