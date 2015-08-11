@@ -24,6 +24,29 @@ body {
     margin: 0 5px 0 5px;
     text-align: center;
     cursor: pointer;
+    color: teal;
+}
+.property {
+    float: left;
+    margin: 0 5px 0 5px;
+    text-align: center;
+    cursor: pointer;
+    color: purple;
+}
+#arrow {
+    float: left;
+    margin: 0;
+    text-align: center;
+    /* color: purple; */
+}
+.selected {
+    font-weight: bold;
+}
+.visible {
+    display: block;
+}
+.hidden {
+    display: none;
 }
 #content {
     overflow: auto;
