@@ -102,48 +102,140 @@ function filterProjects() {
     should_show ? show(projects[i]) : hide(projects[i]);
   }
 
-    if (is_visible) {
-      for (var j = 0; j < tags.length; ++j) {
-	visible_filters[tags[j]] = true;
-      }
-    }
-  }
-
-  // Only show filters that should be visible.
-  var filter_elements = document.getElementsByClassName("filter");
-  var visible_filters = Object.keys(visible_filters);
-  for (var i = 0; i < filter_elements.length; ++i) {
-    var filter = filter_elements[i];
-    if (visible_filters.indexOf(filter.innerHTML) == -1) {
-      filter.style.display = "none";
-    } else {
-      filter.style.display = "block";
-    }
+  // then, for visible projects,
+  // get their tags (into an object)
+  // update visibility
+  var visible_projects = document.getElementsByClassName("visible project");
+  var tag_map = getTagMap(visible_projects);
+  var filters = document.getElementsByClassName("filter");
+  for (var i = 0; i < filters.length; ++i) {
+    filters[i].innerHTML in tag_map ?
+      show(filters[i]) : hide(filters[i]);
   }
 }
 
-function updateProjects(property, isAscending) {
-  // Render the projects, given tags that should be visible and 
-  // a property to sort by.
+function getAllProperties() {
+  // return a list of all existing properties
+  var properties = {};
   var projects = document.getElementsByClassName("project");
   for (var i = 0; i < projects.length; ++i) {
-    // Show a project only if it has all specified tags.
-    var project = projects[i];    
-    var tags = parseTags(project);
-    var display = "block";
-    for (var j = 0; j < filters.length; ++j) {
-      if (tags.indexOf(filters[j]) == -1) {
-	display = "none";
-	break;
-      }
+    var project_properties = Object.keys(parseProperties(projects[i]));
+    for (var j = 0; j < project_properties.length; ++j) {
+      properties[project_properties[j]] = true;
     }
-    project.style.display = display;
+  }
+  return Object.keys(properties);
+}
+
+function parseProperties(project) {
+  // make a property key-value object for given project
+  var properties = {};
+  for (var i = 0; i < project.attributes.length; ++i) {
+    var key = project.attributes[i].nodeName;
+    if (key.substring(0, 5) == "data-" && key.indexOf("tags") == -1) {
+      properties[key.substring(5)] = project.attributes[key];
+    }
+  }
+ return properties;
+}
+
+function toggleOrder(property) {
+  // determine which direction the arrow should point
+  var arrow = document.getElementById("arrow");
+  if (!property.classList.contains("sort-increasing")) {
+    arrow.innerHTML = "&#x2b06";
+    property.classList.add("sort-increasing");
+    property.classList.remove("sort-decreasing");
+  } else {
+    arrow.innerHTML = "&#x2b07";
+    property.classList.add("sort-decreasing");
+    property.classList.remove("sort-increasing");
+  }
+
+  // remove old arrow, re-insert arrow to be next to property
+  property.parentNode.insertBefore(arrow, property.nextSibling);
+
+  // clear old property of sorting-related class
+  var inc = document.getElementsByClassName("sort-increasing");
+  var dec = document.getElementsByClassName("sort-decreasing");
+  for (var i = 0; i < inc.length; ++i)
+    if (inc[i] !== property) inc[i].classList.remove("sort-increasing");
+  for (var i = 0; i < dec.length; ++i)
+    if (dec[i] !== property) dec[i].classList.remove("sort-decreasing");
+}
+
+function initProperties() {
+  // get all existing properties
+  // for each one, add a "property" div to filters (rename?)
+  var properties = getAllProperties();
+  var filters = document.getElementById("filters");
+  for (var i = 0; i < properties.length; ++i) {
+    var property = document.createElement("div");
+    property.innerHTML = properties[i];
+    property.setAttribute("class", "property");
+    // on click, update ordering
+    property.onclick = function() {
+      toggleOrder(this);
+      orderProjects();
+    }
+
+    filters.appendChild(property);
+  }
+
+  // sort descending by date initially
+  var arrow = document.createElement("div");
+  arrow.setAttribute("id", "arrow");
+  filters.appendChild(arrow);
+  var properties = document.getElementsByClassName("property");
+  for (var i = 0; i < properties.length; ++i) {
+    if (properties[i].innerHTML == "date") {
+      toggleOrder(properties[i]);
+      toggleOrder(properties[i]);
+      break;
+    }
   }
 }
 
-function parseTags(e) {
-  // Expects tags in format "tag1 tag2", return ["tag1", "tag2"].
-  var tags = e.attributes["tags"].value.split(" ");
-  if (tags[0] == "") return [];
-  return tags;
+function orderProjects() {
+  // find property to sort by
+  var increasing = true;
+  var sort_prop = document.getElementsByClassName("sort-increasing");
+  if (sort_prop.length == 0) {
+    increasing = false;
+    sort_prop = document.getElementsByClassName("sort-decreasing");
+  }
+  if (sort_prop.length == 0) {
+    console.log("Couldn't find property to sort by");
+    return;
+  }
+  sort_prop = sort_prop[0].innerHTML;
+
+  // get HTMLCollectionlist of projects, convert to Array, and sort
+  var projects = [].slice.call(document.getElementsByClassName("project"));
+  projects.sort(getSortFunction(sort_prop));
+  if (!increasing) projects = projects.reverse();
+
+  // re-insert the projects in new order
+  var projects_div = document.getElementById("projects");
+  for (var i = 0; i < projects.length; ++i) {
+    projects_div.appendChild(projects[i]);
+  }
+}
+
+function getSortFunction(property) {
+  // special case sorting functions
+  var sort_functions = {};
+
+  if (property in sort_functions) return sort_functions[property]
+  return sortByProperty(property);
+}
+
+function sortByProperty(property) {
+  return function(a, b) {
+    var a_val = a.attributes["data-"+property].nodeValue,
+        b_val = b.attributes["data-"+property].nodeValue;
+    if (a_val > b_val) return  1;
+    if (a_val < b_val) return -1;
+    return 0;
+  };
 }
