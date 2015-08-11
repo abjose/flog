@@ -66,7 +66,10 @@ function initFilters() {
   var tag_map = getTagMap(projects);
   var tags = Object.keys(tag_map);
 
-  var filters = document.getElementById("filters");
+  var filters = document.createElement("div");
+  filters.setAttribute("id", "filters");
+  document.getElementById("topbar").appendChild(filters);
+
   for (var i = 0; i < tags.length; ++i) {
     var filter = document.createElement("div");
     filter.innerHTML = tags[i];
