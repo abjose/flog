@@ -144,6 +144,7 @@ def maketree(filename):
    Read an org-mode file and return a tree of Orgnode objects
    created from this file.
    """
+   # get "bare" text (i.e. text for root node)
    try:
       f = open(filename, 'r')
    except IOError:
@@ -151,12 +152,27 @@ def maketree(filename):
       print "Program terminating."
       sys.exit(1)
 
+   root_text = ""
+   for line in f:
+      if "*" in line: break
+      root_text += line + "\n"
 
-   # TODO:
-   # - add parent, children, children_tags, children_properties, ??? to OrgNode
-   # -- should be of immediate children only, right?
-   # - make a root node that has 'bare' text in it
+   root = Orgnode([], "root", root_text, "", [])
+   
+   # iterate over parsed node, generating tree as you go
+   node_list = makelist(filename)
+   parents = []
+   curr_level = 0
+   prev_node = root
+   for node in node_list:
+      if   node.level > curr_level: parents.append(prev_node)
+      elif node.level < curr_level: parents = parents[:node.level]
+      curr_level = node.level
+      # append node to current parent
+      parents[-1].addChild(node)
+      prev_node = node
 
+   return root
    
 ######################
 class Orgnode(object):
@@ -184,6 +200,9 @@ class Orgnode(object):
       for t in alltags:
          self.tags[t] = ''
 
+      self.parent = None
+      self.children = []
+      
       # Look for priority in headline and transfer to prty field
         
    def Heading(self):
@@ -312,6 +331,18 @@ class Orgnode(object):
       """
       return self.deadline
 
+   def setParent(self, parent):
+      """
+      Update parent of this node.
+      """
+      self.parent = parent
+
+   def addChild(self, child):
+      """
+      Add a child to the children list.
+      """
+      self.children.append(child)
+      
    def __repr__(self):
       """
       Print the level, heading text and tag of a node and the body
