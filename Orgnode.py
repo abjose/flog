@@ -155,7 +155,7 @@ def maketree(filename):
    root_text = ""
    for line in f:
       if "*" in line: break
-      root_text += line + "\n"
+      root_text += line
 
    root = Orgnode([], "root", root_text, "", [])
    
