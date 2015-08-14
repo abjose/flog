@@ -145,14 +145,14 @@ function parseProperties(project) {
 function toggleOrder(property) {
   // determine which direction the arrow should point
   var arrow = document.getElementById("arrow");
-  if (!property.classList.contains("sort-increasing")) {
-    arrow.innerHTML = "&#x2b06";
-    property.classList.add("sort-increasing");
-    property.classList.remove("sort-decreasing");
-  } else {
+  if (!property.classList.contains("sort-decreasing")) {
     arrow.innerHTML = "&#x2b07";
     property.classList.add("sort-decreasing");
     property.classList.remove("sort-increasing");
+  } else {
+    arrow.innerHTML = "&#x2b06";
+    property.classList.add("sort-increasing");
+    property.classList.remove("sort-decreasing");
   }
 
   // remove old arrow, re-insert arrow to be next to property
@@ -192,7 +192,6 @@ function initProperties() {
   var properties = document.getElementsByClassName("property");
   for (var i = 0; i < properties.length; ++i) {
     if (properties[i].innerHTML == "date") {
-      toggleOrder(properties[i]);
       toggleOrder(properties[i]);
       break;
     }
