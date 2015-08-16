@@ -1,0 +1,6 @@
+<a href="project.html">
+  <div class="project" 
+       data-tags="kites robots" 
+       {% for k,v in node.properties.items() %}data-{{ k }}="{{ v }}"
+       {% endfor %}>{{ node.headline }}</div>
+</a>
