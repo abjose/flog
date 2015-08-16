@@ -224,6 +224,20 @@ class Orgnode(object):
       """
       return self.body
 
+   def Content(self):
+      """
+      Returns all lines of text (including title) of this node, not including
+      properties and tags
+      """
+      return '*'*self.level + ' ' + self.headline + '\n' + self.body
+
+   def LeafContent(self):
+      """
+      Get all content as if this were a 'leaf' node (i.e. want to treat children
+      only as text, not as proper pages in themselves).
+      """
+      return self.Content() + "\n".join([c.Content() for c in self.children])
+      
    def Level(self):
       """
       Returns an integer corresponding to the level of the node.
@@ -367,6 +381,3 @@ class Orgnode(object):
       n = n + "\n" + self.body
       
       return n
-
-
-    
