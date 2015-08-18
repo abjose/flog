@@ -220,7 +220,8 @@ function orderProjects() {
   // re-insert the projects in new order
   var projects_div = document.getElementById("projects");
   for (var i = 0; i < projects.length; ++i) {
-    projects_div.appendChild(projects[i]);
+    // appendChild parent, as want to include wrapping anchor tag
+    projects_div.appendChild(projects[i].parent);
   }
 }
 
