@@ -1,4 +1,5 @@
-import Orgnode, datetime, markdown
+import Orgnode, datetime, markdown, sys
+from jinja2 import Environment, FileSystemLoader
 
 """
 TODO:
@@ -18,16 +19,38 @@ NOTES:
 - how to do links?
 """
 
-today = datetime.date.today()
-print "Daily plan for", today
-print "-------------------------\n"
+def make_site(root, project_template, page_template):
+    write_page(root.URL(), get_page(root, project_template, page_template))
+    if not root.hasTag('leaf'):
+        for child in root.children:
+            make_site(child, project_template, page_template)
 
-filename = "demo.org"
-nodelist = Orgnode.makelist(filename)
+def write_page(name, content):
+    filename = 'output/' + name + '.html'
+    with open(filename, 'w') as f:
+        f.write(content)
 
-for n in nodelist:
-    #if n.Scheduled() == today:
-    print "[ ] %s (%s)" % (n.Heading(), n.Tags())
-    print n.level
-    print n.properties
-    print n.Body()
+def get_page(node, project_template, page_template):
+    projects = get_projects(node, project_template)
+    content = get_content(node)
+    #print content
+    return page_template.render(projects=projects, content=content)
+
+def get_content(node):
+    content = node.LeafContent() if node.hasTag('leaf') else node.Body()
+    content = content.strip()
+    print content
+    return markdown.markdown(content)
+
+def get_projects(node, project_template):
+    return [project_template.render(node=child) for child in node.children]
+
+if __name__ == "__main__":
+    filename = sys.argv[1]
+    root = Orgnode.maketree(filename)
+
+    env = Environment(loader=FileSystemLoader('templates'))
+    project_template = env.get_template('project.html')
+    page_template = env.get_template('page.html')
+
+    make_site(root, project_template, page_template)
