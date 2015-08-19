@@ -49,18 +49,19 @@ body {
     display: none;
 }
 #content {
-    overflow: auto;
+    /* overflow: auto; */
     margin: 1em auto;
     max-width: 600px;
-    border: 1px dotted #333;
-    padding: 15px 0 0 15px;
+    /* border: 1px dotted #333; */
+    /* padding: 0 0 0 15px; */
 }
 #projects {
-    overflow: auto;
+    /* overflow: auto; */
     margin: 1em auto;
     max-width: 600px;
-    border: 1px dotted #333;
-    padding: 15px 0 0 15px;
+    /* max-width: 800px; */
+    /* border: 1px dotted #333; */
+    /* padding: 15px 0 0 15px; */
 }
 .project {
     float: left;
