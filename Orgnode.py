@@ -320,7 +320,18 @@ class Orgnode(object):
       property does not exist.
       """
       return self.properties.get(keyval, "")
-    
+
+   def HTMLFriendlyProperties(self):
+      """
+      Return a list of property:value pairs, made HTML-friendly if necessary.
+      """
+      items = []
+      for k,v in self.properties.items():
+         # address any special cases
+         if k == "date": v = v[1:-1].split(' ')[0]
+         items.append((k, v))
+      return items
+      
    def setScheduled(self, dateval):
       """
       Set the scheduled date using the supplied date object
