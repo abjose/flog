@@ -367,6 +367,15 @@ class Orgnode(object):
       Add a child to the children list.
       """
       self.children.append(child)
+
+   def URL(self):
+      """
+      Return the 'URL' of the headline (spaces replaced with dashes).
+      """
+      remove = ['.', ',']
+      url = self.headline.lower()
+      for c in remove: url = url.replace(c, '')
+      return url.replace(' ', '-')
       
    def __repr__(self):
       """
