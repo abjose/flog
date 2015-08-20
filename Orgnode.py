@@ -236,7 +236,7 @@ class Orgnode(object):
       Get all content as if this were a 'leaf' node (i.e. want to treat children
       only as text, not as proper pages in themselves).
       """
-      return self.Content() + "\n".join([c.Content() for c in self.children])
+      return self.Body() + "\n".join([c.Content() for c in self.children])
       
    def Level(self):
       """
