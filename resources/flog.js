@@ -1,13 +1,6 @@
 /* TODO
-- ADD SORTING STUFF THEN STOP AND WORK ON org-to-html part
 - use colons instead of spaces to delimit tags
-- figure out what things will look like if both text and projects
 - nice if had filters in URL bar so could "deep link"?
-- expose properties / sort stuff by properties
-  use flexbox? 
-  https://news.ycombinator.com/item?id=9963714
-  https://css-tricks.com/snippets/css/a-guide-to-flexbox/
-  https://philipwalton.github.io/solved-by-flexbox/demos/grids/
 - have different js (or none) for "content" page (project)
 - try out with JS off
 */
