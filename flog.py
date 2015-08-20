@@ -1,4 +1,4 @@
-import Orgnode, datetime, markdown, sys
+import Orgnode, datetime, markdown, sys, os, shutil
 from jinja2 import Environment, FileSystemLoader
 
 """
@@ -20,6 +20,7 @@ NOTES:
 """
 
 def make_site(root, project_template, page_template):
+    if root.hasTag('private'): return
     write_page(root.URL(), get_page(root, project_template, page_template))
     if not root.hasTag('leaf'):
         for child in root.children:
