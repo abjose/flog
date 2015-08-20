@@ -45,6 +45,16 @@ def get_content(node):
 def get_projects(node, project_template):
     return [project_template.render(node=child) for child in node.children]
 
+def empty_folder(folder):
+    filelist = [f for f in os.listdir(folder)]
+    for f in filelist:
+        os.remove(folder+f)
+
+def copy_folder(src_folder, dst_folder):
+    filelist = [f for f in os.listdir(src_folder)]
+    for f in filelist:
+        shutil.copy(src_folder+f, dst_folder)
+
 if __name__ == "__main__":
     filename = sys.argv[1]
     root = Orgnode.maketree(filename)
@@ -53,4 +63,6 @@ if __name__ == "__main__":
     project_template = env.get_template('project.html')
     page_template = env.get_template('page.html')
 
+    empty_folder("output/")
+    copy_folder("resources/", "output/")
     make_site(root, project_template, page_template)
