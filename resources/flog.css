@@ -64,9 +64,16 @@ body {
     /* padding: 15px 0 0 15px; */
 }
 .project {
+    position: relative;
     float: left;
     width: 185px;
     height: 185px;
     background: #ccc;
     margin: 0 15px 15px 0;
+}
+.project span {
+    position: absolute;
+    bottom: 0;
+    color: black;
+    background-color: white;
 }

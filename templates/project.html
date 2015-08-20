@@ -2,5 +2,5 @@
   <div class="project" 
        data-tags="{{ " ".join(node.Tags()) }}" 
        {% for k,v in node.HTMLFriendlyProperties() %}data-{{ k }}="{{ v }}"
-       {% endfor %}>{{ node.headline }}</div>
+       {% endfor %}><span>{{ node.headline }}</span></div>
 </a>
