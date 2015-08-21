@@ -326,9 +326,10 @@ class Orgnode(object):
       Return a list of property:value pairs, made HTML-friendly if necessary.
       """
       items = []
+      date_like = ["date", "started", "updated"]
       for k,v in self.properties.items():
          # address any special cases
-         if k == "date": v = v[1:-1].split(' ')[0]
+         if k in date_like: v = v[1:-1].split(' ')[0]
          items.append((k, v))
       return items
       
