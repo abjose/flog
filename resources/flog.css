@@ -4,6 +4,10 @@ body {
     margin-right: 0px;
     margin-bottom: 0px;
 }
+img {
+    display: block;
+    margin: 0 auto;
+}
 #topbar {
     overflow: auto;
     /* border: 1px solid; */
