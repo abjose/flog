@@ -34,17 +34,17 @@ def write_page(name, content):
 def get_page(node, project_template, page_template):
     projects = get_projects(node, project_template)
     content = get_content(node)
-    #print content
     return page_template.render(projects=projects, content=content)
 
 def get_content(node):
     content = node.LeafContent() if node.hasTag('leaf') else node.Body()
     content = content.strip()
-    print content
     return markdown.markdown(content)
 
 def get_projects(node, project_template):
-    return [project_template.render(node=child) for child in node.children]
+    if node.hasTag("leaf"): return []
+    return [project_template.render(node=child) for child in node.children
+            if not child.hasTag("private")]
 
 def empty_folder(folder):
     filelist = [f for f in os.listdir(folder)]
