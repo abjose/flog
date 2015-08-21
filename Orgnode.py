@@ -229,7 +229,7 @@ class Orgnode(object):
       Returns all lines of text (including title) of this node, not including
       properties and tags
       """
-      return '*'*self.level + ' ' + self.headline + '\n' + self.body
+      return self.headline + '\n' + self.body
 
    def LeafContent(self):
       """
