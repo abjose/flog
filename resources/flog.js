@@ -179,12 +179,13 @@ function initProperties() {
   }
 
   // sort descending by date initially
+  var default_property = "updated";
   var arrow = document.createElement("div");
   arrow.setAttribute("id", "arrow");
   filters.appendChild(arrow);
   var properties = document.getElementsByClassName("property");
   for (var i = 0; i < properties.length; ++i) {
-    if (properties[i].innerHTML == "date") {
+    if (properties[i].innerHTML == default_property) {
       toggleOrder(properties[i]);
       break;
     }
