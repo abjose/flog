@@ -1,37 +1,71 @@
-This is a sexy static site. This text should appear on the root page.
+This text should appear on the root page.
 
-My site is all about
+This demo site is all about
+
 - kites
-- dogs
-
-* news
-This is the "news" section of my site.
-** Look, a website.
+* news                                                         :lots:of:tags:
+The tags for this page appear on the parent page. You can filter what subpages appear by clicking on tags. You can sort by sub-page properties, too. If you click a property name again, the sorting order will be reversed.
+** Look, a website                                                     :woof:
 :PROPERTIES:
-:date:      <2015-07-26 Sun>
-:dog_noise: woof
+:started:  <2012-08-20 Thu>
+:updated:  <2015-06-20 Thu>
 :END:
-I don't believe in private properties.
 # CHECK IT:
 You can use markdown,
+
 - it
 - is
 - nice.
-* writing
-I only write about things that are important.
 ** Saving the world
+:PROPERTIES:
+:started:  <2013-08-20 Thu>
+:updated:  <2015-05-20 Thu>
+:END:
 TODO
+** Story with orgmode headings                                         :leaf:
+:PROPERTIES:
+:started:  <2014-08-20 Thu>
+:updated:  <2015-04-20 Thu>
+:END:
+Because this page has the "leaf" tag, all subsequent headings will be ignored.
+*** #Which can be nice
+Because then you can use them for organization and stuff
+*** ##Which is nice.
 * projects
 Here are my cool projects!
-** handmade kites
+** handmade kites                                                      :leaf:
+:PROPERTIES:
+:started:  <2013-08-20 Thu>
+:updated:  <2015-04-01 Thu>
+:cost:     100
+:END:
 Pictures of kites! I love kites.
-
-INSERT MARKUP
-** asdf								  :completed:
-** asdf								     :boring:
-** start a new website
-this one sucks
+*** TODO: insert pictures of kites.
+** my awesome finished project                                    :completed:
+:PROPERTIES:
+:started:  <2011-08-20 Thu>
+:updated:  <2015-03-01 Thu>
+:cost:     250
+:END:
+** start a new website                                               :boring:
+:PROPERTIES:
+:started:  <2012-08-20 Thu>
+:updated:  <2015-02-01 Thu>
+:cost:     500
+:END:
+This one sucks.
 ** my secret project						    :private:
-* pictures of dogs
-Here are pictures of dogs!
-[markup for pictures]
+:PROPERTIES:
+:started:  <2013-08-19 Mon>
+:updated:  <2015-01-01 Thu>
+:END:
+Pages with the 'private' tag won't be converted to HTML.
+* pictures of kites
+:PROPERTIES:
+:picture:  kite.png
+:END:
+You can set the "page image" that appears on the parent page by specifying a picture property, as done here.
+
+You can also insert pictures on the page with markup:
+
+![a picture](kite.png)
