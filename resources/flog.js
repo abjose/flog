@@ -25,8 +25,8 @@ function toggleSelected(filter) {
 }
 
 function parseTags(project) {
-  // Expects tags in format "tag1 tag2", return ["tag1", "tag2"].
-  var tags = project.attributes["data-tags"].value.split(" ");
+  // Expects tags in format "tag1:tag2", return ["tag1", "tag2"].
+  var tags = project.attributes["data-tags"].value.split(":");
   if (tags[0] == "") return [];
   return tags;
 }
