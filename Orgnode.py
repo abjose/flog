@@ -294,7 +294,14 @@ class Orgnode(object):
       """
       for t in taglist:
          self.tags[t] = ''
-        
+
+   def HTMLFriendlyTags(self):
+      """
+      Only return tags you want to show up on the site.
+      """
+      ignore_list = ["leaf", "private"]
+      return [k for k in self.tags.keys() if k not in ignore_list]
+
    def Todo(self):
       """
       Return the value of the TODO tag

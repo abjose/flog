@@ -1,6 +1,6 @@
 <a href="{{ node.URL() }}.html">
   <div class="project" 
-       data-tags="{{ " ".join(node.Tags()) }}" 
+       data-tags="{{ " ".join(node.HTMLFriendlyTags()) }}" 
        {% for k,v in node.HTMLFriendlyProperties() %}
          data-{{ k }}="{{ v }}"
        {% endfor %}>
