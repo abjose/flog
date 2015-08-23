@@ -3,20 +3,8 @@ from jinja2 import Environment, FileSystemLoader
 
 """
 TODO:
-- get jinja2 working
-- implement maketree (probably)
-- get demo of html working
-  title bar with navigation links (nonfunctional)
-  tags and filters
-- could include basic search: http://lunrjs.com/
-- nice simple layout:
-  http://hermetic.com/bey/caravan.html
-  http://learnlayout.com/display.html
-
-NOTES:
-- what if tagged both public and hidden?
-- what if link to a non-public thing?
-- how to do links?
+- check that no sections have the same heading
+- put a heading on each page?
 """
 
 def make_site(root, project_template, page_template):

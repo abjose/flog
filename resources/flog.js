@@ -1,7 +1,5 @@
 /* TODO
-- use colons instead of spaces to delimit tags
 - nice if had filters in URL bar so could "deep link"?
-- have different js (or none) for "content" page (project)
 - try out with JS off
 */
 
