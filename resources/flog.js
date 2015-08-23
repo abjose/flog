@@ -215,7 +215,7 @@ function orderProjects() {
   var projects_div = document.getElementById("projects");
   for (var i = 0; i < projects.length; ++i) {
     // appendChild parent, as want to include wrapping anchor tag
-    projects_div.appendChild(projects[i].parent);
+    projects_div.appendChild(projects[i].parentNode);
   }
 }
 
