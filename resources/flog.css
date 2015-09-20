@@ -24,21 +24,26 @@ img {
     margin: 0 auto;
 }
 .filter {
-    float: left;
+    float: right;
     margin: 0 5px 0 5px;
     text-align: center;
     cursor: pointer;
     color: teal;
 }
+#properties {
+    /* border: 1px solid; */
+    display: table;
+    margin: 0 auto;
+}
 .property {
-    float: left;
+    float: right;
     margin: 0 5px 0 5px;
     text-align: center;
     cursor: pointer;
     color: purple;
 }
 #arrow {
-    float: left;
+    float: right;
     margin: 0;
     text-align: center;
     /* color: purple; */

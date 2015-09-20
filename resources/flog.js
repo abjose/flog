@@ -59,6 +59,7 @@ function initFilters() {
 
   var filters = document.createElement("div");
   filters.setAttribute("id", "filters");
+  filters.innerHTML = "filter by";
   document.getElementById("topbar").appendChild(filters);
 
   for (var i = 0; i < tags.length; ++i) {
@@ -72,6 +73,42 @@ function initFilters() {
     }
 
     filters.appendChild(filter);
+  }
+}
+
+function initProperties() {
+  // get all existing properties
+  // for each one, add a "property" div to properties
+  var prop_div = document.createElement("div");
+  prop_div.setAttribute("id", "properties");
+  prop_div.innerHTML = "sort by";
+  document.getElementById("topbar").appendChild(prop_div);
+
+  var properties = getAllProperties();
+  for (var i = 0; i < properties.length; ++i) {
+    var property = document.createElement("div");
+    property.innerHTML = properties[i];
+    property.setAttribute("class", "property");
+    // on click, update ordering
+    property.onclick = function() {
+      toggleOrder(this);
+      orderProjects();
+    }
+
+    prop_div.appendChild(property);
+  }
+
+  // sort descending by date initially
+  var default_property = "updated";
+  var arrow = document.createElement("div");
+  arrow.setAttribute("id", "arrow");
+  filters.appendChild(arrow);
+  var properties = document.getElementsByClassName("property");
+  for (var i = 0; i < properties.length; ++i) {
+    if (properties[i].innerHTML == default_property) {
+      toggleOrder(properties[i]);
+      break;
+    }
   }
 }
 
@@ -158,38 +195,6 @@ function toggleOrder(property) {
     if (dec[i] !== property) dec[i].classList.remove("sort-decreasing");
 }
 
-function initProperties() {
-  // get all existing properties
-  // for each one, add a "property" div to filters (rename?)
-  var properties = getAllProperties();
-  var filters = document.getElementById("filters");
-  for (var i = 0; i < properties.length; ++i) {
-    var property = document.createElement("div");
-    property.innerHTML = properties[i];
-    property.setAttribute("class", "property");
-    // on click, update ordering
-    property.onclick = function() {
-      toggleOrder(this);
-      orderProjects();
-    }
-
-    filters.appendChild(property);
-  }
-
-  // sort descending by date initially
-  var default_property = "updated";
-  var arrow = document.createElement("div");
-  arrow.setAttribute("id", "arrow");
-  filters.appendChild(arrow);
-  var properties = document.getElementsByClassName("property");
-  for (var i = 0; i < properties.length; ++i) {
-    if (properties[i].innerHTML == default_property) {
-      toggleOrder(properties[i]);
-      break;
-    }
-  }
-}
-
 function orderProjects() {
   // find property to sort by
   var increasing = true;
@@ -234,3 +239,5 @@ function sortByProperty(property) {
     return 0;
   };
 }
+
+//function updateURL
