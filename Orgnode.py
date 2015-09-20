@@ -279,7 +279,8 @@ class Orgnode(object):
       For example, hasTag('COMPUTER') on headling containing
       :HOME:COMPUTER: would return True.
       """
-      return self.tags.has_key(srch)
+      #return self.tags.has_key(srch)
+      return srch in self.tags
         
    def setTag(self, newtag):
       """
@@ -333,8 +334,10 @@ class Orgnode(object):
       Return a list of property:value pairs, made HTML-friendly if necessary.
       """
       items = []
+      ignore = ['description', 'picture']
       date_like = ["date", "started", "updated"]
       for k,v in self.properties.items():
+         if k in ignore: continue
          # address any special cases
          if k in date_like: v = v[1:-1].split(' ')[0]
          items.append((k, v))
