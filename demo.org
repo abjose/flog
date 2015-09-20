@@ -35,6 +35,7 @@ Because then you can use them for organization and stuff
 Here are my cool projects!
 ** handmade kites                                                      :leaf:
 :PROPERTIES:
+:description: Writeups for all of my kite-related projects.
 :started:  <2013-08-20 Thu>
 :updated:  <2015-04-01 Thu>
 :cost:     100
@@ -43,6 +44,7 @@ Pictures of kites! I love kites.
 *** TODO: insert pictures of kites.
 ** my awesome finished project                                    :completed:
 :PROPERTIES:
+:description: This project is pretty cool. It is also finished. I'm so excited about how finished it is that I added a "completed" tag so you can filter my projects by how finished they are and see that this one is.
 :started:  <2011-08-20 Thu>
 :updated:  <2015-03-01 Thu>
 :cost:     250
@@ -59,7 +61,7 @@ This one sucks.
 :started:  <2013-08-19 Mon>
 :updated:  <2015-01-01 Thu>
 :END:
-Pages with the 'private' tag won't be converted to HTML.
+   Pages with the 'private' tag won't be converted to HTML.
 * pictures of kites
 :PROPERTIES:
 :picture:  kite.png

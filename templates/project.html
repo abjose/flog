@@ -4,8 +4,8 @@
        {% for k,v in node.HTMLFriendlyProperties() %}
          data-{{ k }}="{{ v }}"
        {% endfor %}>
-       {% if node.Property("picture") %}
-         <img src="{{ node.Property("picture") }}"/>
-       {% endif %}
-       <span>{{ node.headline }}</span></div>
+       <b>{{ node.headline }}</b><br>
+       {% if node.Property("description") %}
+         {{ node.Property("description") }}
+       {% endif %}</div>
 </a>

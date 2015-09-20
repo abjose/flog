@@ -53,21 +53,31 @@ img {
     display: none;
 }
 #content {
+    /* overflow: auto; */
     margin: 1em auto;
     max-width: 600px;
+    /* border: 1px dotted #333; */
+    /* padding: 0 0 0 15px; */
 }
 #projects {
+    /* overflow: auto; */
     margin: 1em auto;
     max-width: 600px;
+    /* max-width: 800px; */
+    /* border: 1px dotted #333; */
+    /* padding: 15px 0 0 15px; */
 }
 .project {
     position: relative;
-    padding: 10px 10px 10px 10px;
-    border: 1px solid #333;
-    margin: 0 0 15px 0;
-    color: black;
+    float: left;
+    width: 185px;
+    height: 185px;
+    background: #ccc;
+    margin: 0 15px 15px 0;
 }
-a {
-    /* How else to remove link underline from project boxes? */
-    text-decoration: none;
+.project span {
+    position: absolute;
+    bottom: 0;
+    color: black;
+    background-color: white;
 }
