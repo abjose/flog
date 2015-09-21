@@ -37,7 +37,7 @@ img {
 }
 .property {
     float: right;
-    margin: 0 5px 0 5px;
+    margin: 0 5px 0 0;
     text-align: center;
     cursor: pointer;
     color: purple;

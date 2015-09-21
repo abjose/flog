@@ -81,7 +81,7 @@ function initProperties() {
   // for each one, add a "property" div to properties
   var prop_div = document.createElement("div");
   prop_div.setAttribute("id", "properties");
-  prop_div.innerHTML = "sort by";
+  prop_div.innerHTML = "sort by&nbsp;";
   document.getElementById("topbar").appendChild(prop_div);
 
   var properties = getAllProperties();
