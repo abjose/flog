@@ -1,6 +1,14 @@
-/* TODO
-- nice if had filters in URL bar so could "deep link"?
+/* 
+NOTE
+- can handle URL like
+  flog.com/blah?include=woof:dog&exclude=pow:wop:meow&sort=cost&inc=true
+TODO
 - try out with JS off
+- sweep through code, see if things can be simplified with new URL stuff
+- remove 'include=', etc. from URL if nothing to include/exclude/...
+BUGS
+- sometimes an extraneous ':' precedes include/exclude lists
+- when select two mutually exclusive tags, shows some projects...
 */
 
 initFilters();
@@ -18,8 +26,12 @@ function show(e) {
   e.classList.remove("hidden");
 }
 
-function toggleSelected(filter) {
-  filter.classList.toggle("selected");
+function setFilterState(e, state) {
+  e.classList.remove("excluded");
+  e.classList.remove("included");
+  e.classList.remove("unreachable");
+  if (["included", "excluded", "unreachable"].indexOf(state) != -1)
+    e.classList.add(state);
 }
 
 function parseTags(project) {
@@ -41,14 +53,6 @@ function getTagMap(projects) {
   return tag_map;
 }
 
-function getFilterContent(filters) {
-  var content = [];
-  for (var i = 0; i < filters.length; ++i) {
-    content.push(filters[i].innerHTML);
-  }
-  return content;
-}
-
 function initFilters() {
   // for each project, build up object of tags
   // for each tag, add a filter
@@ -68,7 +72,7 @@ function initFilters() {
     filter.setAttribute("class", "filter");
     show(filter);
     filter.onclick = function() {
-      toggleSelected(this);
+      toggleFilter(this.innerHTML);
       filterProjects();
     }
 
@@ -98,50 +102,57 @@ function initProperties() {
     prop_div.appendChild(property);
   }
 
-  // sort descending by date initially
-  var default_property = "updated";
+  // create sorting-direction arrow
   var arrow = document.createElement("div");
   arrow.setAttribute("id", "arrow");
   filters.appendChild(arrow);
-  var properties = document.getElementsByClassName("property");
-  for (var i = 0; i < properties.length; ++i) {
-    if (properties[i].innerHTML == default_property) {
-      toggleOrder(properties[i]);
-      break;
-    }
-  }
 }
 
 function filterProjects() {
   // get all selected filters
-  // for each project, for each selected filter,
-  // if doesn't have one, hide
-  var selected_filters = document.getElementsByClassName("selected filter");
-  selected_filters = getFilterContent(selected_filters);
+  // for each project, for each tag,
+  // show if has all included tags, has no excluded tags
+  var params = getURLParameters();
+  var include_filters = getIncludeFilters(params);
+  var exclude_filters = getExcludeFilters(params);
+
   var projects = document.getElementsByClassName("project");
   for (var i = 0; i < projects.length; ++i) {
-    var project_tags = parseTags(projects[i]);
     var should_show = true;
-    if (selected_filters.length > 0) {
-      for (var j = 0; j < selected_filters.length; ++j) {
-        if (project_tags.indexOf(selected_filters[j]) == -1) {
-          should_show = false;
-          break;
-        }
+    var project_tags = parseTags(projects[i]);
+    // TODO: simplify this logic
+    // don't show if no tags and any inclusion specified
+    if (project_tags.length == 0 && include_filters.length > 0)
+      should_show = false;
+    // otherwise check each tag
+    for (var j = 0; j < project_tags.length; ++j) {
+      if ((include_filters.length > 0 &&
+           include_filters.indexOf(project_tags[j]) == -1) ||
+          (exclude_filters.length > 0 &&
+           exclude_filters.indexOf(project_tags[j]) != -1)) {
+        should_show = false;
+        break;
       }
     }
     should_show ? show(projects[i]) : hide(projects[i]);
   }
 
-  // then, for visible projects,
-  // get their tags (into an object)
-  // update visibility
+  // update CSS class according to filter status
   var visible_projects = document.getElementsByClassName("visible project");
   var tag_map = getTagMap(visible_projects);
   var filters = document.getElementsByClassName("filter");
   for (var i = 0; i < filters.length; ++i) {
-    filters[i].innerHTML in tag_map ?
-      show(filters[i]) : hide(filters[i]);
+    var filter_text = filters[i].innerHTML;
+    if (include_filters.indexOf(filter_text) != -1) {
+      setFilterState(filters[i], "included");
+    } else if (exclude_filters.indexOf(filter_text) != -1) {
+      setFilterState(filters[i], "excluded");
+    } else if (!(filter_text in tag_map)) {
+      setFilterState(filters[i], "unreachable");
+    } else {
+      // clear any existing state
+      setFilterState(filters[i], "");
+    }
   }
 }
 
@@ -171,48 +182,44 @@ function parseProperties(project) {
 }
 
 function toggleOrder(property) {
-  // determine which direction the arrow should point
-  var arrow = document.getElementById("arrow");
-  if (!property.classList.contains("sort-decreasing")) {
-    arrow.innerHTML = "&#x2b07";
-    property.classList.add("sort-decreasing");
-    property.classList.remove("sort-increasing");
-  } else {
-    arrow.innerHTML = "&#x2b06";
-    property.classList.add("sort-increasing");
-    property.classList.remove("sort-decreasing");
-  }
+  var params = getURLParameters();
+  var new_property = property.innerHTML;
+  var old_property = getOrderProperty(params);
+  var increasing = (new_property == old_property)
+    ? isOrderIncreasing(params) : true;
 
-  // remove old arrow, re-insert arrow to be next to property
-  property.parentNode.insertBefore(arrow, property.nextSibling);
-
-  // clear old property of sorting-related class
-  var inc = document.getElementsByClassName("sort-increasing");
-  var dec = document.getElementsByClassName("sort-decreasing");
-  for (var i = 0; i < inc.length; ++i)
-    if (inc[i] !== property) inc[i].classList.remove("sort-increasing");
-  for (var i = 0; i < dec.length; ++i)
-    if (dec[i] !== property) dec[i].classList.remove("sort-decreasing");
+  // update URL with new property
+  setOrderProperty(new_property, !increasing);
 }
 
 function orderProjects() {
   // find property to sort by
-  var increasing = true;
-  var sort_prop = document.getElementsByClassName("sort-increasing");
-  if (sort_prop.length == 0) {
-    increasing = false;
-    sort_prop = document.getElementsByClassName("sort-decreasing");
-  }
-  if (sort_prop.length == 0) {
-    console.log("Couldn't find property to sort by");
-    return;
-  }
-  sort_prop = sort_prop[0].innerHTML;
+  var params = getURLParameters();
+  var increasing = isOrderIncreasing(params);
+  var sort_prop = getOrderProperty(params);
+  if (sort_prop == "") sort_prop = "updated";
 
   // get HTMLCollectionlist of projects, convert to Array, and sort
   var projects = [].slice.call(document.getElementsByClassName("project"));
   projects.sort(getSortFunction(sort_prop));
   if (!increasing) projects = projects.reverse();
+
+  // determine which direction the arrow should point
+  var arrow = document.getElementById("arrow");
+  if (increasing) {
+    arrow.innerHTML = "&#x2b06";
+  } else {
+    arrow.innerHTML = "&#x2b07";
+  }
+
+  // re-insert arrow next to proper property
+  var properties = document.getElementsByClassName("property");
+  for (var i = 0; i < properties.length; ++i) {
+    if (properties[i].innerHTML == sort_prop) {
+      properties[i].parentNode.insertBefore(arrow, properties[i].nextSibling);
+      break;
+    }
+  }
 
   // re-insert the projects in new order
   var projects_div = document.getElementById("projects");
@@ -240,4 +247,87 @@ function sortByProperty(property) {
   };
 }
 
-//function updateURL
+function getURLParameters() {
+  // return an object of key/value pairs based on URL
+  var url = window.location.href.split('?');
+  if (url.length == 1) return {};
+  var params = {};
+  var data = url[1].split('&');
+  for (var i = 0; i < data.length; ++i) {
+    var param = data[i].split('=');
+    if (param.length > 1) params[param[0]] = param[1];
+  }
+  return params;
+}
+
+function setURLParameters(params) {
+  // update page URL given object of key/value pairs
+  var root = window.location.href.split('?')[0];
+  var param_strings = [];
+  var keys = Object.keys(params);
+  for (var i = 0; i < keys.length; ++i) {
+    param_strings.push(String(keys[i]) + "=" + String(params[keys[i]]));
+  }
+  // only add param section if necessary
+  if (param_strings.length != 0) root += "?" + param_strings.join('&');
+  // replace old URL state
+  window.history.replaceState("", "", root);
+}
+
+function getIncludeFilters(params) {
+  params = params || getURLParameters();
+  params = params['include'];
+  if (params) return params.split(":");
+  return [];
+}
+function getExcludeFilters(params) {
+  params = params || getURLParameters();
+  params = params['exclude'];
+  if (params) return params.split(":");
+  return [];
+}
+
+function getOrderProperty(params) {
+  return (params || getURLParameters())['sort'] || "";
+}
+function getOrderDirection(params) {
+  return (params || getURLParameters())['inc'] || "";
+}
+function isOrderIncreasing(params) {
+  return getOrderDirection(params) != "false";
+}
+
+function setOrderProperty(property, increasing) {
+  var params = getURLParameters();
+  params['sort'] = property;
+  params['inc'] = increasing;
+  setURLParameters(params);
+}
+
+function toggleFilter(filter) {
+  var params = getURLParameters();
+  var included = (params['include'] || "").split(":");
+  var excluded = (params['exclude'] || "").split(":");
+  var include_idx = included.indexOf(filter);
+  var exclude_idx = excluded.indexOf(filter);
+  // remove filter from both just in case
+  included = remove(included, filter);
+  excluded = remove(excluded, filter);
+  // now update like include=>exclude=>nothing
+  if (include_idx != -1) {
+    excluded.push(filter);
+  } else if (exclude_idx != -1) {
+    // do nothing
+  } else {
+    included.push(filter);
+  }
+  // update params, and update URL
+  params['include'] = included.join(":");
+  params['exclude'] = excluded.join(":");
+  setURLParameters(params);
+}
+
+function remove(array, value){
+  // filter value out of passed array
+  return array.filter(function(el) { return el !== value; });
+}
