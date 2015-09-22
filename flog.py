@@ -14,8 +14,8 @@ def make_site(root, project_template, page_template):
         for child in root.children:
             make_site(child, project_template, page_template)
 
-def write_page(name, content):
-    filename = 'output/' + name + '.html'
+def write_page(url, content):
+    filename = 'output/' + url
     with open(filename, 'w') as f:
         f.write(content)
 

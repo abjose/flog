@@ -386,7 +386,7 @@ class Orgnode(object):
       remove = ['.', ',']
       url = self.headline.lower()
       for c in remove: url = url.replace(c, '')
-      return url.replace(' ', '-')
+      return url.replace(' ', '-') + ".html"
       
    def __repr__(self):
       """
