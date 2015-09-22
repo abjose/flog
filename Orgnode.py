@@ -139,7 +139,7 @@ def makelist(filename):
                             
    return nodelist
 
-def maketree(filename):
+def maketree(title, filename):
    """
    Read an org-mode file and return a tree of Orgnode objects
    created from this file.
@@ -157,7 +157,7 @@ def maketree(filename):
       if "*" in line: break
       root_text += line
 
-   root = Orgnode([], "root", root_text, "", [])
+   root = Orgnode([], title, root_text, "", [])
    
    # iterate over parsed node, generating tree as you go
    node_list = makelist(filename)
@@ -170,6 +170,7 @@ def maketree(filename):
       curr_level = node.level
       # append node to current parent
       parents[-1].addChild(node)
+      node.setParent(parents[-1])
       prev_node = node
 
    return root
@@ -245,6 +246,15 @@ class Orgnode(object):
       """
       return self.level
 
+   def Breadcrumbs(self):
+      """
+      Return a list of (URL, headline) tuples, from root to this node, to
+      facilitate constructing a 'breadcrumb' link sequence.
+      """
+      # TODO: handle cycles...
+      crumbs = [] if self.parent is None else self.parent.Breadcrumbs()
+      return crumbs + [(self.URL(), self.Heading())]
+      
    def Priority(self):
       """
       Returns the priority of this headline: 'A', 'B', 'C' or empty

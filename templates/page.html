@@ -1,11 +1,17 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>flog</title>
+    <title>{{ title }}</title>
     <link rel="stylesheet" href="flog.css" type="text/css">
   </head>
   <body>
-    <div id="topbar"><div id="title">flog</div></div>
+    <div id="topbar">
+      <div id="title">
+      {% for url, title in node.Breadcrumbs() %}
+        / <a href="{{ url }}">{{ title }}</a>
+      {% endfor %}
+      </div>
+    </div>
     {% if content %}
     <div id="content">{{ content }}</div>
     {% endif %}
