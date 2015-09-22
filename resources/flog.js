@@ -61,6 +61,9 @@ function initFilters() {
   var tag_map = getTagMap(projects);
   var tags = Object.keys(tag_map);
 
+  // skip if no filters to show
+  if (tags.length == 0) return;
+
   var filters = document.createElement("div");
   filters.setAttribute("id", "filters");
   filters.innerHTML = "filter by";
@@ -83,12 +86,13 @@ function initFilters() {
 function initProperties() {
   // get all existing properties
   // for each one, add a "property" div to properties
+  var properties = getAllProperties();
+  if (properties.length == 0) return;  // skip if nothing to show
   var prop_div = document.createElement("div");
   prop_div.setAttribute("id", "properties");
   prop_div.innerHTML = "sort by&nbsp;";
   document.getElementById("topbar").appendChild(prop_div);
 
-  var properties = getAllProperties();
   for (var i = 0; i < properties.length; ++i) {
     var property = document.createElement("div");
     property.innerHTML = properties[i];
@@ -109,6 +113,9 @@ function initProperties() {
 }
 
 function filterProjects() {
+  // skip if no filters to show
+  if (document.getElementById("filters") == undefined) return;
+
   // get all selected filters
   // for each project, for each tag,
   // show if has all included tags, has no excluded tags
@@ -193,6 +200,9 @@ function toggleOrder(property) {
 }
 
 function orderProjects() {
+  // skip if no properties to show
+  if (document.getElementById("properties") == undefined) return;
+
   // find property to sort by
   var params = getURLParameters();
   var increasing = isOrderIncreasing(params);
