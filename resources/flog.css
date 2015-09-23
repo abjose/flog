@@ -1,4 +1,6 @@
 body {
+    font-family: helvetica;
+    font-size: small;
     margin-left: 0px;
     margin-top: 0px;
     margin-right: 0px;
@@ -9,6 +11,7 @@ img {
     margin: 0 auto;
 }
 #topbar {
+    font-style: italic;
     overflow: auto;
     /* border: 1px solid; */
     margin: 0.5em 0 0 0;
@@ -18,12 +21,18 @@ img {
     text-align: center;
     margin: 0 0 0.3em 0;
 }
+.project-title {
+    font-size: medium;
+    font-weight: bold;
+    font-family: courier;
+}
 #filters {
     /* border: 1px solid; */
     display: table;
     margin: 0 auto;
 }
 .filter {
+    font-family: monospace;
     float: right;
     margin: 0 5px 0 5px;
     text-align: center;
@@ -36,6 +45,7 @@ img {
     margin: 0 auto;
 }
 .property {
+    font-family: monospace;
     float: right;
     margin: 0 5px 0 0;
     text-align: center;

@@ -4,7 +4,7 @@
        {% for k,v in node.HTMLFriendlyProperties() %}
          data-{{ k }}="{{ v }}"
        {% endfor %}>
-       <b>{{ node.headline }}</b><br>
+       <span class="project-title">{{ node.headline }}</span><br>
        {% if node.Property("description") %}
          {{ node.Property("description") }}
        {% endif %}</div>
