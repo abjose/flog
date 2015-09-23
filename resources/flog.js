@@ -5,9 +5,8 @@ NOTE
 TODO
 - try out with JS off
 - sweep through code, see if things can be simplified with new URL stuff
-- remove 'include=', etc. from URL if nothing to include/exclude/...
 BUGS
-- sometimes an extraneous ':' precedes include/exclude lists
+- extraneous ':' precedes include/exclude lists sometimes
 - when select two mutually exclusive tags, shows some projects...
 */
 
@@ -271,6 +270,12 @@ function getURLParameters() {
 }
 
 function setURLParameters(params) {
+  // remove any empty parameters
+  var keys = Object.keys(params);
+  for (var i = 0; i < keys.length; ++i) {
+    var val = params[keys[i]];
+    if (val == undefined || val == "") delete params[keys[i]];
+  }
   // update page URL given object of key/value pairs
   var root = window.location.href.split('?')[0];
   var param_strings = [];
@@ -323,7 +328,7 @@ function toggleFilter(filter) {
   // remove filter from both just in case
   included = remove(included, filter);
   excluded = remove(excluded, filter);
-  // now update like include=>exclude=>nothing
+  // now update like nothing=>include=>exclude=>nothing
   if (include_idx != -1) {
     excluded.push(filter);
   } else if (exclude_idx != -1) {
