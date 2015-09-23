@@ -264,7 +264,7 @@ function setURLParameters(params) {
   var keys = Object.keys(params);
   for (var i = 0; i < keys.length; ++i) {
     var val = params[keys[i]];
-    if (val == undefined || val == "") delete params[keys[i]];
+    if (val === undefined || val === "") delete params[keys[i]];
   }
   // update page URL given object of key/value pairs
   var root = window.location.href.split('?')[0];
