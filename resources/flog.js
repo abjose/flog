@@ -6,7 +6,6 @@ TODO
 - try out with JS off
 - sweep through code, see if things can be simplified with new URL stuff
 BUGS
-- extraneous ':' precedes include/exclude lists sometimes
 - when select two mutually exclusive tags, shows some projects...
 */
 
@@ -321,8 +320,8 @@ function setOrderProperty(property, increasing) {
 
 function toggleFilter(filter) {
   var params = getURLParameters();
-  var included = (params['include'] || "").split(":");
-  var excluded = (params['exclude'] || "").split(":");
+  var included = (params['include']) ? params['include'].split(":") : [];
+  var excluded = (params['exclude']) ? params['exclude'].split(":") : [];
   var include_idx = included.indexOf(filter);
   var exclude_idx = excluded.indexOf(filter);
   // remove filter from both just in case
