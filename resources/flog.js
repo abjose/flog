@@ -5,8 +5,6 @@ NOTE
 TODO
 - try out with JS off
 - sweep through code, see if things can be simplified with new URL stuff
-BUGS
-- when select two mutually exclusive tags, shows some projects...
 */
 
 initFilters();
@@ -114,35 +112,28 @@ function filterProjects() {
   // skip if no filters to show
   if (document.getElementById("filters") == undefined) return;
 
-  // get all selected filters
-  // for each project, for each tag,
-  // show if has all included tags, has no excluded tags
+  // get filters and projects
   var params = getURLParameters();
   var include_filters = getIncludeFilters(params);
   var exclude_filters = getExcludeFilters(params);
-
   var projects = document.getElementsByClassName("project");
-  for (var i = 0; i < projects.length; ++i) {
-    var should_show = true;
-    var project_tags = parseTags(projects[i]);
-    // TODO: simplify this logic
-    // don't show if no tags and any inclusion specified
-    if (project_tags.length == 0 && include_filters.length > 0)
-      should_show = false;
-    // otherwise check each tag
-    for (var j = 0; j < project_tags.length; ++j) {
-      if ((include_filters.length > 0 &&
-           include_filters.indexOf(project_tags[j]) == -1) ||
-          (exclude_filters.length > 0 &&
-           exclude_filters.indexOf(project_tags[j]) != -1)) {
-        should_show = false;
-        break;
-      }
-    }
-    should_show ? show(projects[i]) : hide(projects[i]);
-  }
 
-  // update CSS class according to filter status
+  // reset all projects to be visible
+  for (var i = 0; i < projects.length; ++i) show(projects[i]);
+
+  // hide any projects that exclude included tags
+  for (var i = 0; i < include_filters.length; ++i)
+    for (var j = 0; j < projects.length; ++j )
+      if (parseTags(projects[j]).indexOf(include_filters[i]) == -1)
+        hide(projects[j]);
+
+  // hide any projects that include excluded tags
+  for (var i = 0; i < exclude_filters.length; ++i)
+    for (var j = 0; j < projects.length; ++j )
+      if (parseTags(projects[j]).indexOf(exclude_filters[i]) != -1)
+        hide(projects[j]);
+
+  // update filter CSS according to filter status
   var visible_projects = document.getElementsByClassName("visible project");
   var tag_map = getTagMap(visible_projects);
   var filters = document.getElementsByClassName("filter");
