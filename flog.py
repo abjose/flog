@@ -5,19 +5,20 @@ from jinja2 import Environment, FileSystemLoader
 TODO:
 - check that no sections have the same heading
 - put a heading on each page?
+- allow user to specify another resources/ directory
 """
 
 def make_site(title, root, project_template, page_template):
-    if root.hasTag('private'): return
+    if root.hasTag("private"): return
     write_page(root.URL(), get_page(title, root, project_template,
                                     page_template))
-    if not root.hasTag('leaf'):
+    if not root.hasTag("leaf"):
         for child in root.children:
             make_site(title, child, project_template, page_template)
 
 def write_page(url, content):
-    filename = 'output/' + url
-    with open(filename, 'w') as f:
+    filename = "output/" + url
+    with open(filename, "w") as f:
         f.write(content)
 
 def get_page(title, node, project_template, page_template):
@@ -27,7 +28,7 @@ def get_page(title, node, project_template, page_template):
                                 content=content)
 
 def get_content(node):
-    content = node.LeafContent() if node.hasTag('leaf') else node.Body()
+    content = node.LeafContent() if node.hasTag("leaf") else node.Body()
     content = content.strip()
     return markdown.markdown(content)
 
@@ -37,6 +38,7 @@ def get_projects(node, project_template):
             if not child.hasTag("private")]
 
 def empty_folder(folder):
+    if not os.path.exists(folder): os.makedirs(folder)
     filelist = [f for f in os.listdir(folder)]
     for f in filelist:
         os.remove(folder+f)
@@ -47,14 +49,16 @@ def copy_folder(src_folder, dst_folder):
         shutil.copy(src_folder+f, dst_folder)
 
 if __name__ == "__main__":
-    filename = sys.argv[1]
-    title = filename.split('.')[0]
-    root = Orgnode.maketree(title, filename)
-    
-    env = Environment(loader=FileSystemLoader('templates'))
-    project_template = env.get_template('project.html')
-    page_template = env.get_template('page.html')
+    flog_path = os.path.split(sys.argv[0])[0]
+    if flog_path: flog_path += "/"
+    org_filename = sys.argv[1]
+    title = org_filename.split(".")[0]
+    root = Orgnode.maketree(title, org_filename)
+
+    env = Environment(loader=FileSystemLoader(flog_path + "templates"))
+    project_template = env.get_template("project.html")
+    page_template = env.get_template("page.html")
 
     empty_folder("output/")
-    copy_folder("resources/", "output/")
+    copy_folder(flog_path + "resources/", "output/")
     make_site(title, root, project_template, page_template)
