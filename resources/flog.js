@@ -65,7 +65,7 @@ function initFilters() {
   filters.innerHTML = "filter by";
   document.getElementById("topbar").appendChild(filters);
 
-  for (var i = 0; i < tags.length; ++i) {
+  for (var i = tags.length-1; i >= 0; --i) {
     var filter = document.createElement("div");
     filter.innerHTML = tags[i];
     filter.setAttribute("class", "filter");
