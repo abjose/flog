@@ -182,7 +182,7 @@ function toggleOrder(property) {
   var new_property = property.innerHTML;
   var old_property = getOrderProperty(params);
   var increasing = (new_property == old_property)
-    ? isOrderIncreasing(params) : true;
+    ? isOrderIncreasing(params) : false;
 
   // update URL with new property
   setOrderProperty(new_property, !increasing);
