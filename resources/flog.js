@@ -182,10 +182,10 @@ function toggleOrder(property) {
   var new_property = property.innerHTML;
   var old_property = getOrderProperty(params);
   var increasing = (new_property == old_property)
-    ? isOrderIncreasing(params) : false;
+    ? !isOrderIncreasing(params) : false;
 
   // update URL with new property
-  setOrderProperty(new_property, !increasing);
+  setOrderProperty(new_property, increasing);
 }
 
 function orderProjects() {
@@ -299,7 +299,7 @@ function getOrderDirection(params) {
   return (params || getURLParameters())['inc'] || "";
 }
 function isOrderIncreasing(params) {
-  return getOrderDirection(params) != "false";
+  return getOrderDirection(params) == "true";
 }
 
 function setOrderProperty(property, increasing) {
