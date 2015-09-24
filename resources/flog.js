@@ -238,8 +238,10 @@ function getSortFunction(property) {
 
 function sortByProperty(property) {
   return function(a, b) {
-    var a_val = a.attributes["data-"+property].nodeValue,
-        b_val = b.attributes["data-"+property].nodeValue;
+    var a_val = a.attributes["data-"+property] ?
+      a.attributes["data-"+property].nodeValue : 0;
+        b_val = b.attributes["data-"+property] ?
+      b.attributes["data-"+property].nodeValue : 0;
     if (a_val > b_val) return  1;
     if (a_val < b_val) return -1;
     return 0;
