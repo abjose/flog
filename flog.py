@@ -6,6 +6,7 @@ TODO:
 - check that no sections have the same heading
 - put a heading on each page?
 - allow user to specify another resources/ directory
+- get root to be 'index.html' while still allowing you to use title
 """
 
 def make_site(title, root, project_template, page_template):
@@ -17,7 +18,7 @@ def make_site(title, root, project_template, page_template):
             make_site(title, child, project_template, page_template)
 
 def write_page(url, content):
-    filename = "output/" + url
+    filename = "html/" + url
     with open(filename, "w") as f:
         f.write(content)
 
@@ -44,9 +45,13 @@ def empty_folder(folder):
         os.remove(folder+f)
 
 def copy_folder(src_folder, dst_folder):
-    filelist = [f for f in os.listdir(src_folder)]
-    for f in filelist:
-        shutil.copy(src_folder+f, dst_folder)
+    try:
+        filelist = [f for f in os.listdir(src_folder)]
+        for f in filelist:
+            shutil.copy(src_folder+f, dst_folder)
+    except:
+        print ("Couldn't copy " + src_folder + " to " + dst_folder
+               + ", continuing...")
 
 if __name__ == "__main__":
     flog_path = os.path.split(sys.argv[0])[0]
@@ -59,6 +64,9 @@ if __name__ == "__main__":
     project_template = env.get_template("project.html")
     page_template = env.get_template("page.html")
 
-    empty_folder("output/")
-    copy_folder(flog_path + "resources/", "output/")
+    empty_folder("html/")
+    # copy user-specified resources over
+    copy_folder("resources/", "html/")
+    # copy the flog resources over (be careful of overwriting)
+    copy_folder(flog_path + "resources/", "html/")
     make_site(title, root, project_template, page_template)
