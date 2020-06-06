@@ -1,5 +1,5 @@
 # Copyright (c) 2010 Charles Cave
-# 
+#
 #  Permission  is  hereby  granted,  free  of charge,  to  any  person
 #  obtaining  a copy  of  this software  and associated  documentation
 #  files   (the  "Software"),   to  deal   in  the   Software  without
@@ -7,10 +7,10 @@
 #  modify, merge, publish,  distribute, sublicense, and/or sell copies
 #  of  the Software, and  to permit  persons to  whom the  Software is
 #  furnished to do so, subject to the following conditions:
-# 
+#
 #  The above copyright notice and this permission notice shall be
 #  included in all copies or substantial portions of the Software.
-# 
+#
 #  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
 #  EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
 #  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
@@ -60,7 +60,7 @@ def makelist(filename):
    deadline_date = ''
    nodelist      = []
    propdict      = dict()
-   
+
    for line in f:
       hdng = re.search('^(\*+)\s(.*?)\s*$', line)
       if hdng:
@@ -93,7 +93,7 @@ def makelist(filename):
          if line[:10] == '#+SEQ_TODO':
             kwlist = re.findall('([A-Z]+)\(', line)
             for kw in kwlist: todos[kw] = ""
-            
+
          if re.search(':PROPERTIES:', line): continue
          if re.search(':END:', line): continue
          prop_srch = re.search('^\s*:(.*?):\s*(.*?)\s*$', line)
@@ -110,19 +110,19 @@ def makelist(filename):
             deadline_date = datetime.date(int(dd_re.group(1)),
                                           int(dd_re.group(2)),
                                           int(dd_re.group(3)) )
-            
+
          # if line[:1] != '#':
          bodytext = bodytext + line
 
-   # write out last node              
+   # write out last node
    thisNode = Orgnode(level, heading, bodytext, tag1, alltags)
-   thisNode.setProperties(propdict)   
+   thisNode.setProperties(propdict)
    if sched_date:
       thisNode.setScheduled(sched_date)
    if deadline_date:
       thisNode.setDeadline(deadline_date)
    nodelist.append( thisNode )
-              
+
    # using the list of TODO keywords found in the file
    # process the headings searching for TODO keywords
    for n in nodelist:
@@ -136,7 +136,7 @@ def makelist(filename):
       if prtysrch:
          n.setPriority(prtysrch.group(1))
          n.setHeading(prtysrch.group(2))
-                            
+
    return nodelist
 
 def maketree(title, filename):
@@ -158,7 +158,7 @@ def maketree(title, filename):
       root_text += line
 
    root = Orgnode([], title, root_text, "", [])
-   
+
    # iterate over parsed node, generating tree as you go
    node_list = makelist(filename)
    parents = []
@@ -174,7 +174,7 @@ def maketree(title, filename):
       prev_node = node
 
    return root
-   
+
 ######################
 class Orgnode(object):
    """
@@ -203,9 +203,9 @@ class Orgnode(object):
 
       self.parent = None
       self.children = []
-      
+
       # Look for priority in headline and transfer to prty field
-        
+
    def Heading(self):
       """
       Return the Heading text of the node without the TODO tag
@@ -238,7 +238,7 @@ class Orgnode(object):
       only as text, not as proper pages in themselves).
       """
       return self.Body() + "\n".join([c.Content() for c in self.children])
-      
+
    def Level(self):
       """
       Returns an integer corresponding to the level of the node.
@@ -254,7 +254,7 @@ class Orgnode(object):
       # TODO: handle cycles...
       crumbs = [] if self.parent is None else self.parent.Breadcrumbs()
       return crumbs + [(self.URL(), self.Heading())]
-      
+
    def Priority(self):
       """
       Returns the priority of this headline: 'A', 'B', 'C' or empty
@@ -268,7 +268,7 @@ class Orgnode(object):
       Values values are '', 'A', 'B', 'C'
       """
       self.prty = newprty
-        
+
    def Tag(self):
       """
       Returns the value of the first tag.
@@ -278,7 +278,7 @@ class Orgnode(object):
 
    def Tags(self):
       """
-      Returns a list of all tags 
+      Returns a list of all tags
       For example, :HOME:COMPUTER: would return ['HOME', 'COMPUTER']
       """
       return self.tags.keys()
@@ -291,7 +291,7 @@ class Orgnode(object):
       """
       #return self.tags.has_key(srch)
       return srch in self.tags
-        
+
    def setTag(self, newtag):
       """
       Change the value of the first tag to the supplied string
@@ -331,7 +331,7 @@ class Orgnode(object):
       name/value pairs
       """
       self.properties = dictval
-      
+
    def Property(self, keyval):
       """
       Returns the value of the requested property or null if the
@@ -352,7 +352,7 @@ class Orgnode(object):
          if k in date_like: v = v[1:-1].split(' ')[0]
          items.append((k, v))
       return items
-      
+
    def setScheduled(self, dateval):
       """
       Set the scheduled date using the supplied date object
@@ -364,7 +364,7 @@ class Orgnode(object):
       Return the scheduled date object or null if nonexistent
       """
       return self.scheduled
-    
+
    def setDeadline(self, dateval):
       """
       Set the deadline (due) date using the supplied date object
@@ -393,11 +393,15 @@ class Orgnode(object):
       """
       Return the 'URL' of the headline (spaces replaced with dashes).
       """
+      # TODO: confusing to handle "index" case in here.
+      if self.parent is None:
+         return "index.html"
+
       remove = ['.', ',']
       url = self.headline.lower()
       for c in remove: url = url.replace(c, '')
       return url.replace(' ', '-') + ".html"
-      
+
    def __repr__(self):
       """
       Print the level, heading text and tag of a node and the body
@@ -415,10 +419,10 @@ class Orgnode(object):
       closecolon = ''
       for t in self.tags.keys():
          n = n + ':' + t
-         closecolon = ':'   
+         closecolon = ':'
       n = n + closecolon
       # Need to output Scheduled Date, Deadline Date, property tags The
       # following will output the text used to construct the object
       n = n + "\n" + self.body
-      
+
       return n
