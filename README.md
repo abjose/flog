@@ -1,6 +1,7 @@
 # flog
 
-Generates a static website from an org-mode file. Tags and properties become filters.
+Generates a static website from an org-mode file. Tags and properties become filters. Dependencies: markdown, jinja2.
+
 
 ```
 python3 flog.py orgfile.org 
