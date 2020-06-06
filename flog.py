@@ -50,8 +50,7 @@ def copy_folder(src_folder, dst_folder):
         for f in filelist:
             shutil.copy(src_folder+f, dst_folder)
     except:
-        print ("Couldn't copy " + src_folder + " to " + dst_folder
-               + ", continuing...")
+        print(f"Couldn't copy {src_folder} to {dst_folder}, continuing...")
 
 if __name__ == "__main__":
     flog_path = os.path.split(sys.argv[0])[0]

@@ -44,8 +44,8 @@ def makelist(filename):
    try:
       f = open(filename, 'r')
    except IOError:
-      print "Unable to open file [%s] " % filename
-      print "Program terminating."
+      print("Unable to open file [%s] " % filename)
+      print("Program terminating.")
       sys.exit(1)
 
    todos         = dict()  # populated from #+SEQ_TODO line
@@ -148,8 +148,8 @@ def maketree(title, filename):
    try:
       f = open(filename, 'r')
    except IOError:
-      print "Unable to open file [%s] " % filename
-      print "Program terminating."
+      print("Unable to open file [%s] " % filename)
+      print("Program terminating.")
       sys.exit(1)
 
    root_text = ""
