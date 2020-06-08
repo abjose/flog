@@ -1,10 +1,12 @@
-/* 
+/*
 NOTE
 - can handle URL like
   flog.com/blah?include=woof:dog&exclude=pow:wop:meow&sort=cost&inc=true
 TODO
 - try out with JS off
 - sweep through code, see if things can be simplified with new URL stuff
+- make arrow swap directions first time you click it
+- don't make link in breadcrumb for current page?
 */
 
 initFilters();
@@ -105,7 +107,7 @@ function initProperties() {
   // create sorting-direction arrow
   var arrow = document.createElement("div");
   arrow.setAttribute("id", "arrow");
-  filters.appendChild(arrow);
+  prop_div.appendChild(arrow);
 }
 
 function filterProjects() {
@@ -182,7 +184,7 @@ function toggleOrder(property) {
   var new_property = property.innerHTML;
   var old_property = getOrderProperty(params);
   var increasing = (new_property == old_property)
-    ? !isOrderIncreasing(params) : false;
+    ? !isOrderIncreasing(params) : true;
 
   // update URL with new property
   setOrderProperty(new_property, increasing);
