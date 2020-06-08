@@ -246,14 +246,23 @@ class Orgnode(object):
       """
       return self.level
 
-   def Breadcrumbs(self):
+   def RootRelative(self):
+      """
+      Return '../' to get back to the root of the page, like for linking to stylesheets
+      from subdirectories.
+      """
+      return "".join(["../" for i in range(self.Level()-1)])
+
+   def Breadcrumbs(self, include_url=True):
       """
       Return a list of (URL, headline) tuples, from root to this node, to
       facilitate constructing a 'breadcrumb' link sequence.
       """
       # TODO: handle cycles...
-      crumbs = [] if self.parent is None else self.parent.Breadcrumbs()
-      return crumbs + [(self.URL(), self.Heading())]
+      crumbs = [] if self.parent is None else self.parent.Breadcrumbs(include_url=include_url)
+      if include_url:
+         return crumbs + [(self.URL(), self.Heading())]
+      return crumbs + [self.Heading()]
 
    def Priority(self):
       """
@@ -397,8 +406,11 @@ class Orgnode(object):
       if self.parent is None:
          return "index.html"
 
-      remove = ['.', ',']
-      url = self.headline.lower()
+      breadcrumbs = self.Breadcrumbs(include_url=False)[1:]
+
+      remove = ['.', ',', '?', '=', '&']
+      # url = self.headline.lower()
+      url = "/".join(breadcrumbs).lower()
       for c in remove: url = url.replace(c, '')
       return url.replace(' ', '-') + ".html"
 

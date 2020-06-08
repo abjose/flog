@@ -3,23 +3,23 @@ from jinja2 import Environment, FileSystemLoader
 
 """
 TODO:
-- check that no sections have the same heading
-- put a heading on each page?
-- allow user to specify another resources/ directory
-- get root to be 'index.html' while still allowing you to use title
+-
 """
 
-def make_site(title, root, project_template, page_template):
-    if root.hasTag("private"): return
-    write_page(root.URL(), get_page(title, root, project_template,
+def make_site(title, node, project_template, page_template):
+    if node.hasTag("private"): return
+    write_page(node.URL(), get_page(title, node, project_template,
                                     page_template))
-    if not root.hasTag("leaf"):
-        for child in root.children:
+    if not node.hasTag("leaf"):
+        for child in node.children:
             make_site(title, child, project_template, page_template)
 
 def write_page(url, content):
-    filename = "html/" + url
-    with open(filename, "w") as f:
+    path = "html/" + url
+    dirname = os.path.dirname(path)
+    if not os.path.exists(dirname):
+        os.makedirs(dirname)
+    with open(path, "w") as f:
         f.write(content)
 
 def get_page(title, node, project_template, page_template):
@@ -39,10 +39,8 @@ def get_projects(node, project_template):
             if not child.hasTag("private")]
 
 def empty_folder(folder):
-    if not os.path.exists(folder): os.makedirs(folder)
-    filelist = [f for f in os.listdir(folder)]
-    for f in filelist:
-        os.remove(folder+f)
+    shutil.rmtree(folder)
+    os.makedirs(folder)
 
 def copy_folder(src_folder, dst_folder):
     try:
@@ -52,12 +50,29 @@ def copy_folder(src_folder, dst_folder):
     except:
         print(f"Couldn't copy {src_folder} to {dst_folder}, continuing...")
 
+# Check the children of each node have unique names to avoid naming collisions.
+def verify_child_uniqueness(node):
+    child_names = [child.Heading() for child in node.children]
+    if len(child_names) != len(set(child_names)):
+        print(f"Error: Duplicate child found on page '{node.Heading()}', please rename.")
+        return False
+    return all(map(verify_child_uniqueness, node.children))
+
+# Return False if a check failed, otherwise true
+def verify_tree(tree):
+    if not verify_child_uniqueness(tree):
+        return False
+    return True
+
 if __name__ == "__main__":
     flog_path = os.path.split(sys.argv[0])[0]
     if flog_path: flog_path += "/"
     org_filename = sys.argv[1]
     title = org_filename.split(".")[0]
     root = Orgnode.maketree(title, org_filename)
+    if not verify_tree(root):
+        print("Quitting early, please fix errors to proceed.")
+        sys.exit(0)
 
     env = Environment(loader=FileSystemLoader(flog_path + "templates"))
     project_template = env.get_template("project.html")
