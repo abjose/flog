@@ -50,13 +50,37 @@ def copy_folder(src_folder, dst_folder):
     except:
         print(f"Couldn't copy {src_folder} to {dst_folder}, continuing...")
 
-# Check the children of each node have unique names to avoid naming collisions.
+# Not currently used.
 def verify_child_uniqueness(node):
     child_names = [child.Heading() for child in node.children]
     if len(child_names) != len(set(child_names)):
         print(f"Error: Duplicate child found on page '{node.Heading()}', please rename.")
         return False
     return all(map(verify_child_uniqueness, node.children))
+
+# Check urls are unique to avoid overwriting.
+# TODO: handle this better; previously tried making directory structure reflect tree but
+#       it's kind of annoying.
+def verify_url_uniqueness(node):
+    def get_urls(node):
+        if node.hasTag("private"): return []
+        if node.hasTag("leaf"): return [node.URL()]
+        descendant_urls = [item for sublist in map(get_urls, node.children)
+                           for item in sublist]
+        return [node.URL()] + descendant_urls
+
+    seen = dict()
+    no_dupes = True
+    for url in get_urls(node):
+        if url not in seen:
+            seen[url] = 1
+        else:
+            no_dupes = False
+            seen[url] += 1
+            if seen[url] == 2:
+                print(f"Error: Duplicate url '{url}', please rename.")
+
+    return no_dupes
 
 # Check that all children of a node share same properties.
 def verify_children_share_properties(node):
@@ -75,7 +99,7 @@ def verify_children_share_properties(node):
 
 # Return False if a check failed, otherwise true
 def verify_tree(tree):
-    if not verify_child_uniqueness(tree):
+    if not verify_url_uniqueness(tree):
         return False
 
     # Just warn about this for now
