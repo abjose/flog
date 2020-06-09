@@ -2,13 +2,17 @@
 <html>
   <head>
     <title>{{ title }}</title>
-    <link rel="stylesheet" href="{{ node.RootRelative() }}flog.css" type="text/css">
+    <link rel="stylesheet" href="flog.css" type="text/css">
   </head>
   <body>
     <div id="topbar">
       <div id="title">
-      {% for url, title in node.Breadcrumbs() %}
-        / <a href="{{ node.RootRelative() + url }}">{{ title }}</a>
+      {% for url, heading in node.Breadcrumbs() %}
+        {% if loop.last %}
+          / {{ heading }}
+        {% else %}
+          / <a href="{{ url }}">{{ heading }}</a>
+        {% endif %}
       {% endfor %}
       </div>
     </div>
@@ -21,7 +25,6 @@
     </div>
     {% endif %}
   </body>
-  <script language="javascript" type="text/javascript"
-          src="{{ node.RootRelative() }}flog.js">
+  <script language="javascript" type="text/javascript" src="flog.js">
   </script>
 </html>
