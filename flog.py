@@ -58,10 +58,29 @@ def verify_child_uniqueness(node):
         return False
     return all(map(verify_child_uniqueness, node.children))
 
+# Check that all children of a node share same properties.
+def verify_children_share_properties(node):
+    if not node.children:
+        return True
+
+    child0_props = set(node.children[0].properties.keys())
+    for child in node.children[1:]:
+        verify_children_share_properties(child)
+        child_props = set(child.properties.keys())
+        if child_props != child0_props:
+            print(f"Warning: A child of '{node.Heading()}' ('{child.Heading()}' or " +
+                  f"'{node.children[0].Heading()}') is missing a common property.")
+            return False
+    return True
+
 # Return False if a check failed, otherwise true
 def verify_tree(tree):
     if not verify_child_uniqueness(tree):
         return False
+
+    # Just warn about this for now
+    verify_children_share_properties(tree)
+
     return True
 
 if __name__ == "__main__":
