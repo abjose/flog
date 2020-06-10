@@ -35,8 +35,9 @@ img {
     font-family: monospace;
     float: right;
     margin: 0 5px 0 5px;
-    text-align: center;
     cursor: pointer;
+    text-align: center;
+    text-decoration: underline;
     /* color: teal; */
 }
 #properties {

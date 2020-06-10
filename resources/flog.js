@@ -64,7 +64,7 @@ function initFilters() {
 
   var filters = document.createElement("div");
   filters.setAttribute("id", "filters");
-  filters.innerHTML = "filter by";
+  filters.innerHTML = "filter by:";
   document.getElementById("topbar").appendChild(filters);
 
   for (var i = tags.length-1; i >= 0; --i) {
@@ -88,7 +88,7 @@ function initProperties() {
   if (properties.length == 0) return;  // skip if nothing to show
   var prop_div = document.createElement("div");
   prop_div.setAttribute("id", "properties");
-  prop_div.innerHTML = "sort by&nbsp;";
+  prop_div.innerHTML = "sort by:&nbsp;";
   document.getElementById("topbar").appendChild(prop_div);
 
   for (var i = 0; i < properties.length; ++i) {
