@@ -30,6 +30,7 @@ img {
     /* border: 1px solid; */
     display: table;
     margin: 0 auto;
+    user-select: none;
 }
 .filter {
     font-family: monospace;
