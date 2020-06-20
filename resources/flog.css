@@ -9,6 +9,9 @@ body {
 img {
     display: block;
     margin: 0 auto;
+    /* based on 600px content width */
+    width: 300px;
+    height: auto;
 }
 #topbar {
     font-style: italic;

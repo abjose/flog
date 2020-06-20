@@ -1,12 +1,10 @@
 /*
-NOTE
+NOTES
 - can handle URL like
   flog.com/blah?include=woof:dog&exclude=pow:wop:meow&sort=cost&inc=true
 TODO
 - try out with JS off
 - sweep through code, see if things can be simplified with new URL stuff
-- make arrow swap directions first time you click it
-- don't make link in breadcrumb for current page?
 */
 
 initFilters();
