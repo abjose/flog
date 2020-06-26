@@ -1,10 +1,5 @@
-import Orgnode, datetime, markdown, sys, os, shutil
+import Orgnode, datetime, markdown, sys, os, shutil, re
 from jinja2 import Environment, FileSystemLoader
-
-"""
-TODO:
--
-"""
 
 def make_site(title, node, project_template, page_template):
     if node.hasTag("private"): return
@@ -30,8 +25,17 @@ def get_page(title, node, project_template, page_template):
 
 def get_content(node):
     content = node.LeafContent() if node.hasTag("leaf") else node.Body()
-    content = content.strip()
+    content = convert_org_links_to_markdown(content.strip())
     return markdown.markdown(content)
+
+def convert_org_links_to_markdown(content):
+    def replacer(match):
+        converted = match.group(1)
+        rsrcs = "./resources/"
+        if rsrcs in converted:
+            converted = converted.replace(rsrcs, "")
+        return f"![pic]({converted})"
+    return re.sub(r"\[\[([\w./]+)\]\]", replacer, content, re.MULTILINE)
 
 def get_projects(node, project_template):
     if node.hasTag("leaf"): return []

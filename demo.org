@@ -70,6 +70,7 @@ You can set the "page image" that appears on the parent page by specifying a pic
 You can also insert pictures on the page with markup:
 
 ![a picture](kite.png)
+[[./resources/kite.png]]
 * projects 2
 ** projects 3                                                          :leaf:
 :PROPERTIES:
