@@ -353,6 +353,19 @@ class Orgnode(object):
          items.append((k, v))
       return items
 
+   def projectDate(self):
+      """
+      Return a representative date for this node, if possible.
+      - if "updated" property is defined, return that
+      - otherwise, if "started" or "date" property is defined, return that
+      """
+      html_props = dict(self.HTMLFriendlyProperties())
+      date_priority = ["updated", "started", "date"]
+      for key in date_priority:
+         if key in html_props:
+            return html_props[key]
+      return ""
+
    def setScheduled(self, dateval):
       """
       Set the scheduled date using the supplied date object

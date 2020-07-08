@@ -29,6 +29,10 @@ img {
     font-weight: bold;
     font-family: courier;
 }
+.project-date {
+    float: right;
+    font-weight: normal;
+}
 #filters {
     /* border: 1px solid; */
     display: table;

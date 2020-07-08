@@ -4,8 +4,11 @@
        {% for k,v in node.HTMLFriendlyProperties() %}
          data-{{ k }}="{{ v }}"
        {% endfor %}>
-       <span class="project-title">{{ node.Heading() }}</span><br>
-       {% if node.Property("description") %}
-         {{ node.Property("description") }}
-       {% endif %}</div>
+    <span class="project-title">
+      {{ node.Heading() }}
+      <div class="project-date">{{ node.projectDate() }}</div>
+    </span><br>
+    {% if node.Property("description") %}
+      {{ node.Property("description") }}
+    {% endif %}</div>
 </a>
